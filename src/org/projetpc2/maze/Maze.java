@@ -1,11 +1,8 @@
-package org.projetpc2.maze;
+/**
+ * @author : Vlad Drelciuc
+ */
 
-/***
- * Formation : introduction a la programmation
- * Exercice : labyrinthe
- * Auteur : Projet PC2 (www.projetpc2.org)
- * Distribué sous license MIT (https://opensource.org/licenses/MIT)
- **/
+package org.projetpc2.maze;
 
 public class Maze {
 
@@ -21,7 +18,7 @@ public class Maze {
     private int[][] maze;
     private int i = 0;
     private int j = 0;
-    private final int STEP = 2;
+    private int step;
     private Direction direction = Direction.RIGHT;
 
     // use symbols to make reading the output easier...
@@ -29,7 +26,7 @@ public class Maze {
     // 1 - open space - '.'
     // 2 - path taken - 'X'
     // 3 - goal - 'O'
-    private char[] mazeSymbols = {'#', '.', 'X', 'O' };
+    private char[] mazeSymbols = {'#', '.', 'X', 'O'};
 
     // 0 - obstacle
     // 1 - open space
@@ -83,8 +80,8 @@ public class Maze {
                     {0, 0, 1, 1, 1, 1, 1, 0, 0, 0},
                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},};
 
-    public Maze(int niveau){
-        switch(niveau) {
+    public Maze(int level) {
+        switch (level) {
             case 1:
                 this.maze = LEVEL_ONE;
                 i = 5;
@@ -108,12 +105,12 @@ public class Maze {
         }
     }
 
-    public void avancer() {
-        for (int k = 0; k < STEP; k++) {
+    public void goForward() {
+        for (int k = 0; k < step; k++) {
             if (!isOver) {
-                switch(direction) {
+                switch (direction) {
                     case LEFT:
-                        if(isAvailablePosition(i, j - 1)) { // aimed position is valid
+                        if (isAvailablePosition(i, j - 1)) { // aimed position is valid
                             j--;
                             if (maze[i][j] == 3) { // aimed position is end, finish game
                                 isOver = true;
@@ -127,7 +124,7 @@ public class Maze {
                         }
                         break;
                     case RIGHT:
-                        if(isAvailablePosition(i, j + 1)) { // aimed position is valid
+                        if (isAvailablePosition(i, j + 1)) { // aimed position is valid
                             j++;
                             if (maze[i][j] == 3) { // aimed position is end, finish game
                                 isOver = true;
@@ -141,7 +138,7 @@ public class Maze {
                         }
                         break;
                     case UP:
-                        if(isAvailablePosition(i - 1, j)) { // aimed position is valid
+                        if (isAvailablePosition(i - 1, j)) { // aimed position is valid
                             i--;
                             if (maze[i][j] == 3) { // aimed position is end, finish game
                                 isOver = true;
@@ -155,7 +152,7 @@ public class Maze {
                         }
                         break;
                     case DOWN:
-                        if(isAvailablePosition(i + 1, j)) { // aimed position is valid
+                        if (isAvailablePosition(i + 1, j)) { // aimed position is valid
                             i++;
                             if (maze[i][j] == 3) { // aimed position is end, finish game
                                 isOver = true;
@@ -175,9 +172,9 @@ public class Maze {
         }
     }
 
-    public void tournerGauche() {
+    public void turnLeft() {
         if (!isOver) {
-            switch(direction) {
+            switch (direction) {
                 case LEFT:
                     direction = Direction.DOWN;
                     break;
@@ -194,9 +191,9 @@ public class Maze {
         }
     }
 
-    public void tournerDroite() {
+    public void turnRight() {
         if (!isOver) {
-            switch(direction) {
+            switch (direction) {
                 case LEFT:
                     direction = Direction.UP;
                     break;
@@ -213,41 +210,45 @@ public class Maze {
         }
     }
 
-    public boolean peutContinuer() {
+    public boolean canGoForward() {
         if (!isOver) {
-            switch(direction) {
+            switch (direction) {
                 case LEFT:
-                    return isAvailablePosition(i, j - STEP);
+                    return isAvailablePosition(i, j - step);
                 case RIGHT:
-                    return isAvailablePosition(i, j + STEP);
+                    return isAvailablePosition(i, j + step);
                 case UP:
-                    return isAvailablePosition(i - STEP, j);
+                    return isAvailablePosition(i - step, j);
                 case DOWN:
-                    return isAvailablePosition(i + STEP, j);
+                    return isAvailablePosition(i + step, j);
             }
         }
         return false;
     }
 
-    public boolean butAtteint() {
+    public boolean reachedGoal() {
         return isSuccessful;
     }
 
     private boolean isAvailablePosition(int row, int col) {
-        boolean result =  row >= 0 && row < maze.length
+        boolean result = row >= 0 && row < maze.length
                 && col >= 0 && col < maze[row].length
                 && (maze[row][col] == 1 || maze[row][col] == 3);
         return result;
     }
 
-    public void print(){
+    public void print() {
         System.out.println();
-        for(int row = 0; row < maze.length; ++row) {
-            for(int col = 0; col < maze[row].length; ++col) {
+        for (int row = 0; row < maze.length; ++row) {
+            for (int col = 0; col < maze[row].length; ++col) {
                 System.out.print(mazeSymbols[maze[row][col]]);
             }
             System.out.println();
         }
+    }
+
+    public void setStep(int step) {
+        this.step = step;
     }
 
     public boolean getIsOver() {

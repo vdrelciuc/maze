@@ -1,9 +1,6 @@
-/***
- * Formation : introduction a la programmation
- * Exercice : labyrinthe
- * Auteur : Projet PC2 (www.projetpc2.org)
- * Distribué sous license MIT (https://opensource.org/licenses/MIT)
- **/
+/**
+ * @author : Vlad Drelciuc
+ */
 
 package org.projetpc2.maze;
 
@@ -13,48 +10,47 @@ public class Main {
 
     private static final int MIN_LEVEL = 1;
     private static final int MAX_LEVEL = 4;
+    private static final int CURRENT_STEP = 2;
 
     public static void main(String[] args) {
 
         int selectedLevel;
 
-        System.out.print("Please enter a level between " + MIN_LEVEL + " and " + MAX_LEVEL + ": ");
-        Scanner sc = new Scanner(System.in);
-        selectedLevel = sc.nextInt();
+        do {
+            System.out.print("Please enter a level between " + MIN_LEVEL + " and " + MAX_LEVEL + ": ");
+            Scanner sc = new Scanner(System.in);
+            selectedLevel = sc.nextInt();
+        } while (selectedLevel < MIN_LEVEL || selectedLevel > MAX_LEVEL);
 
-        App app = new App();
+        App app = new App(selectedLevel);
+        app.maze.setStep(CURRENT_STEP);
 
-        if (app.CURRENT_LEVEL >= MIN_LEVEL || app.CURRENT_LEVEL <= MAX_LEVEL) {
-            System.out.println("Selected level: " + selectedLevel);
+        System.out.println("\nSelected level: " + selectedLevel);
+        System.out.println("\nInitial maze:");
+        app.maze.print();
 
-            System.out.println("\nLabyrinthe initial");
-            app.maze.print();
+        switch (selectedLevel) {
+            case 1:
+                app.level1();
+                break;
+            case 2:
+                app.level2();
+                break;
+            case 3:
+                app.level3();
+                break;
+            case 4:
+                app.level4();
+                break;
+        }
 
-            switch (selectedLevel) {
-                case 1:
-                    app.niveau1();
-                    break;
-                case 2:
-                    app.niveau2();
-                    break;
-                case 3:
-                    app.niveau3();
-                    break;
-                case 4:
-                    app.niveau4();
-                    break;
-            }
+        System.out.println("\nFinal maze:");
+        app.maze.print();
 
-            System.out.println("\nLabyrinthe final");
-            app.maze.print();
-
-            if (app.maze.getIsSuccessful()) {
-                System.out.println("\nFélicitations! Niveau réussi avec succès.");
-            } else {
-                System.out.println("Niveau échoué. Réessaie!");
-            }
+        if (app.maze.getIsSuccessful()) {
+            System.out.println("\nCongratulations!");
         } else {
-            System.out.println("Une erreur est survenue. Choisis un niveau entre 1 et 4.");
+            System.out.println("\nTry again!");
         }
 
 
